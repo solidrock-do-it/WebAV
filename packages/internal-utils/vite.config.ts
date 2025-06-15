@@ -20,7 +20,7 @@ export default defineConfig({
     browser: {
       provider: 'webdriverio',
       enabled: true,
-      name: 'chrome', // browser name is required
+      name: 'chrome',
       headless: true,
       providerOptions: {
         browserVersion: 'stable',

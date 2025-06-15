@@ -1,10 +1,85 @@
 import { EventTool } from '@webav/internal-utils';
 import { IRectBaseProps, Rect } from './rect';
 
+// 缓动函数类型
+export enum EasingType {
+  Linear = 'linear',
+  EaseIn = 'ease-in',
+  EaseOut = 'ease-out',
+  EaseInOut = 'ease-in-out',
+  EaseInQuad = 'ease-in-quad',
+  EaseOutQuad = 'ease-out-quad',
+  EaseInOutQuad = 'ease-in-out-quad',
+  EaseInCubic = 'ease-in-cubic',
+  EaseOutCubic = 'ease-out-cubic',
+  EaseInOutCubic = 'ease-in-out-cubic',
+  EaseInBack = 'ease-in-back',
+  EaseOutBack = 'ease-out-back',
+  EaseInOutBack = 'ease-in-out-back',
+  EaseInBounce = 'ease-in-bounce',
+  EaseOutBounce = 'ease-out-bounce',
+  EaseInOutBounce = 'ease-in-out-bounce',
+}
+
+// 缓动函数映射
+export const EASING_FUNCTIONS = {
+  [EasingType.Linear]: (t: number) => t,
+  [EasingType.EaseIn]: (t: number) => t * t,
+  [EasingType.EaseOut]: (t: number) => 1 - (1 - t) * (1 - t),
+  [EasingType.EaseInOut]: (t: number) =>
+    t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
+  [EasingType.EaseInQuad]: (t: number) => t * t,
+  [EasingType.EaseOutQuad]: (t: number) => 1 - (1 - t) * (1 - t),
+  [EasingType.EaseInOutQuad]: (t: number) =>
+    t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
+  [EasingType.EaseInCubic]: (t: number) => t * t * t,
+  [EasingType.EaseOutCubic]: (t: number) => 1 - Math.pow(1 - t, 3),
+  [EasingType.EaseInOutCubic]: (t: number) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  [EasingType.EaseInBack]: (t: number) => {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+    return c3 * t * t * t - c1 * t * t;
+  },
+  [EasingType.EaseOutBack]: (t: number) => {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+  },
+  [EasingType.EaseInOutBack]: (t: number) => {
+    const c1 = 1.70158;
+    const c2 = c1 * 1.525;
+    return t < 0.5
+      ? (Math.pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
+      : (Math.pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2;
+  },
+  [EasingType.EaseInBounce]: (t: number) =>
+    1 - EASING_FUNCTIONS[EasingType.EaseOutBounce](1 - t),
+  [EasingType.EaseOutBounce]: (t: number) => {
+    const n1 = 7.5625;
+    const d1 = 2.75;
+    if (t < 1 / d1) {
+      return n1 * t * t;
+    } else if (t < 2 / d1) {
+      return n1 * (t -= 1.5 / d1) * t + 0.75;
+    } else if (t < 2.5 / d1) {
+      return n1 * (t -= 2.25 / d1) * t + 0.9375;
+    } else {
+      return n1 * (t -= 2.625 / d1) * t + 0.984375;
+    }
+  },
+  [EasingType.EaseInOutBounce]: (t: number) => {
+    return t < 0.5
+      ? (1 - EASING_FUNCTIONS[EasingType.EaseOutBounce](1 - 2 * t)) / 2
+      : (1 + EASING_FUNCTIONS[EasingType.EaseOutBounce](2 * t - 1)) / 2;
+  },
+};
+
 interface IAnimationOpts {
   duration: number;
   delay?: number;
   iterCount?: number;
+  easing?: EasingType;
 }
 
 type TAnimateProps = IRectBaseProps & { opacity: number };
@@ -22,26 +97,14 @@ type TKeyFrameOpts = Partial<
  * @see {@link VisibleSprite}
  */
 export abstract class BaseSprite {
-  /**
-   * 控制素材在视频中的空间属性（坐标、旋转、缩放）
-   */
   rect = new Rect();
 
-  /**
-   * 控制素材在的时间偏移、时长、播放速率，常用于剪辑场景时间轴（轨道）模块
-   * duration 不能大于引用 {@link IClip} 的时长，单位 微秒
-   *
-   * playbackRate 控制当前素材的播放速率，1 表示正常播放；
-   * **注意**
-   *    1. 设置 playbackRate 时需要主动修正 duration
-   *    2. 音频使用最简单的插值算法来改变速率，所以改变速率后音调会产生变化，自定义算法请使用 {@link MP4Clip.tickInterceptor} 配合实现
-   *
-   */
   #time = {
     offset: 0,
     duration: 0,
     playbackRate: 1,
   };
+
   get time(): { offset: number; duration: number; playbackRate: number } {
     return this.#time;
   }
@@ -54,44 +117,24 @@ export abstract class BaseSprite {
       value: Partial<{ rect: Partial<Rect>; zIndex: number }>,
     ) => void;
   }>();
-  /**
-   * 监听属性变更事件
-   * @example
-   * sprite.on('propsChange', (changedProps) => {})
-   */
   on = this.#evtTool.on;
 
   #zIndex = 0;
   get zIndex(): number {
     return this.#zIndex;
   }
-
-  /**
-   * 控制素材间的层级关系，zIndex 值较小的素材会被遮挡
-   */
   set zIndex(v: number) {
     const changed = this.#zIndex !== v;
     this.#zIndex = v;
     if (changed) this.#evtTool.emit('propsChange', { zIndex: v });
   }
 
-  /**
-   * 不透明度
-   */
   opacity = 1;
-
-  /**
-   * 水平或垂直方向翻转素材
-   */
   flip: 'horizontal' | 'vertical' | null = null;
 
   #animatKeyFrame: TAnimationKeyFrame | null = null;
-
   #animatOpts: Required<IAnimationOpts> | null = null;
 
-  /**
-   * @see {@link IClip.ready}
-   */
   ready = Promise.resolve();
 
   constructor() {
@@ -107,38 +150,19 @@ export abstract class BaseSprite {
       rect: { center, angle },
     } = this;
     ctx.setTransform(
-      // 水平 缩放、倾斜
       this.flip === 'horizontal' ? -1 : 1,
       0,
-      // 垂直 倾斜、缩放
       0,
       this.flip === 'vertical' ? -1 : 1,
-      // 坐标原点偏移 x y
       center.x,
       center.y,
     );
-    // 任意方向翻转，旋转角度转为负值，才能与控制点同步
     ctx.rotate((this.flip == null ? 1 : -1) * angle);
-
     ctx.globalAlpha = this.opacity;
   }
 
   /**
-   * 给素材添加动画，使用方法参考 css animation
-   *
-   * @example
-   * sprite.setAnimation(
-   *   {
-   *     '0%': { x: 0, y: 0 },
-   *     '25%': { x: 1200, y: 680 },
-   *     '50%': { x: 1200, y: 0 },
-   *     '75%': { x: 0, y: 680 },
-   *     '100%': { x: 0, y: 0 },
-   *   },
-   *   { duration: 4e6, iterCount: 1 },
-   * );
-   *
-   * @see [视频水印动画](https://webav-tech.github.io/WebAV/demo/2_1-concat-video)
+   * 给素材添加动画，支持缓动
    */
   setAnimation(keyFrame: TKeyFrameOpts, opts: IAnimationOpts): void {
     this.#animatKeyFrame = Object.entries(keyFrame).map(([k, val]) => {
@@ -152,12 +176,10 @@ export abstract class BaseSprite {
       duration: opts.duration,
       delay: opts.delay ?? 0,
       iterCount: opts.iterCount ?? Infinity,
+      easing: opts.easing ?? EasingType.Linear,
     });
   }
 
-  /**
-   * 如果当前 sprite 已被设置动画，将 sprite 的动画属性设定到指定时间的状态
-   */
   animate(time: number): void {
     if (
       this.#animatKeyFrame == null ||
@@ -186,11 +208,6 @@ export abstract class BaseSprite {
     }
   }
 
-  /**
-   * 将当前 sprite 的属性赋值到目标
-   *
-   * 用于 clone，或 {@link VisibleSprite} 与 {@link OffscreenSprite} 实例间的类型转换
-   */
   copyStateTo<T extends BaseSprite>(target: T) {
     target.#animatKeyFrame = this.#animatKeyFrame;
     target.#animatOpts = this.#animatOpts;
@@ -206,6 +223,9 @@ export abstract class BaseSprite {
   }
 }
 
+/**
+ * 动画关键帧插值，支持缓动类型
+ */
 export function linearTimeFn(
   time: number,
   kf: TAnimationKeyFrame,
@@ -215,7 +235,6 @@ export function linearTimeFn(
   if (offsetTime / opts.duration >= opts.iterCount) return {};
 
   const t = offsetTime % opts.duration;
-
   const process = offsetTime === opts.duration ? 1 : t / opts.duration;
   const idx = kf.findIndex((it) => it[0] >= process);
   if (idx === -1) return {};
@@ -227,14 +246,17 @@ export function linearTimeFn(
   const startFrame = startState[1];
 
   const rs: Partial<TAnimateProps> = {};
-  // 介于两个Frame状态间的进度
-  const stateProcess =
+  // 介于两个Frame状态间的进度，应用缓动
+  const rawStateProcess =
     (process - startState[0]) / (nextState[0] - startState[0]);
+  const easingFn =
+    EASING_FUNCTIONS[opts.easing!] ?? EASING_FUNCTIONS[EasingType.Linear];
+  const stateProcess = easingFn(rawStateProcess);
+
   for (const prop in nextFrame) {
     const p = prop as keyof TAnimateProps;
     if (startFrame[p] == null) continue;
     // @ts-expect-error
-    // eslint-disable-next-line
     rs[p] = (nextFrame[p] - startFrame[p]) * stateProcess + startFrame[p];
   }
 
