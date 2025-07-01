@@ -31,7 +31,7 @@ Steps to reproduce the issue:
 **Environment Information**
 
 - Operating System/Browser Version:
-- @webav Version:
+- @webrock Version:
 
 **Additional Information [Optional]**
 

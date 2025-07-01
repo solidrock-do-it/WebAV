@@ -1,7 +1,12 @@
-import { Log, EventTool, file2stream, recodemux } from '@webav/internal-utils';
-import { OffscreenSprite } from './sprite/offscreen-sprite';
+import {
+  EventTool,
+  file2stream,
+  Log,
+  recodemux,
+} from '@webrock/internal-utils';
 import { sleep } from './av-utils';
 import { DEFAULT_AUDIO_CONF } from './clips';
+import { OffscreenSprite } from './sprite/offscreen-sprite';
 
 export interface ICombinatorOpts {
   width?: number;

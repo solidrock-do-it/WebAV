@@ -4,18 +4,18 @@ import mp4box, {
   SampleOpts,
   TrakBoxParser,
 } from '@webav/mp4box.js';
-import { autoReadStream, file2stream, Log } from '@webav/internal-utils';
+import { autoReadStream, file2stream, Log } from '@webrock/internal-utils';
+import { tmpfile, write } from 'opfs-tools';
 import {
-  extractPCM4AudioData,
+  concatPCMFragments,
   extractPCM4AudioBuffer,
+  extractPCM4AudioData,
   mixinPCM,
   ringSliceFloat32Array,
-  concatPCMFragments,
 } from '../av-utils';
 import { DEFAULT_AUDIO_CONF } from '../clips';
-import { SampleTransform } from './sample-transform';
 import { extractFileConfig } from './mp4box-utils';
-import { tmpfile, write } from 'opfs-tools';
+import { SampleTransform } from './sample-transform';
 
 function fixMP4BoxFileDuration(
   inMP4File: MP4File,
@@ -203,12 +203,20 @@ async function concatStreamsToMP4BoxFile(
             const offsetCTS = type === 'video' ? vCTS : aCTS;
 
             samples.forEach((s) => {
-              outfile.addSample(trackId, s.data, {
-                duration: s.duration,
-                dts: s.dts + offsetDTS,
-                cts: s.cts + offsetCTS,
-                is_sync: s.is_sync,
-              });
+              const ab = s.data.buffer.slice(
+                s.data.byteOffset,
+                s.data.byteOffset + s.data.byteLength,
+              );
+              outfile.addSample(
+                trackId,
+                ab instanceof ArrayBuffer ? ab : new ArrayBuffer(0),
+                {
+                  duration: s.duration,
+                  dts: s.dts + offsetDTS,
+                  cts: s.cts + offsetCTS,
+                  is_sync: s.is_sync,
+                },
+              );
             });
 
             const lastSamp = samples.at(-1);
@@ -450,7 +458,17 @@ export function mixinMP4AndAudio(
       } else if (chunkType === 'samples') {
         const { id, type, samples } = data;
         if (type === 'video') {
-          samples.forEach((s) => outfile.addSample(id, s.data, s));
+          samples.forEach((s) => {
+            const ab = s.data.buffer.slice(
+              s.data.byteOffset,
+              s.data.byteOffset + s.data.byteLength,
+            );
+            outfile.addSample(
+              id,
+              ab instanceof ArrayBuffer ? ab : new ArrayBuffer(0),
+              s,
+            );
+          });
 
           if (!mp4HasAudio) await addInputAudio2Track(samples);
           return;

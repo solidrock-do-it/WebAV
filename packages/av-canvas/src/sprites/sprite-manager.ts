@@ -1,5 +1,5 @@
-import { VisibleSprite } from '@webav/av-cliper';
-import { EventTool } from '@webav/internal-utils';
+import { VisibleSprite } from '@webrock/av-cliper';
+import { EventTool } from '@webrock/internal-utils';
 
 export enum ESpriteManagerEvt {
   ActiveSpriteChange = 'activeSpriteChange',

@@ -1,6 +1,6 @@
-import { VisibleSprite, MediaStreamClip } from '@webav/av-cliper';
+import { MediaStreamClip, VisibleSprite } from '@webrock/av-cliper';
+import { AVRecorder } from '@webrock/av-recorder';
 import { AVCanvas } from '../src/index';
-import { AVRecorder } from '@webav/av-recorder';
 import { createEl } from '../src/utils';
 
 const avCvs = new AVCanvas(document.querySelector('#app') as HTMLElement, {

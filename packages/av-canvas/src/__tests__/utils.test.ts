@@ -1,4 +1,4 @@
-import { Rect } from '@webav/av-cliper';
+import { Rect } from '@webrock/av-cliper';
 import { expect, test } from 'vitest';
 import { getRectCtrls } from '../utils';
 

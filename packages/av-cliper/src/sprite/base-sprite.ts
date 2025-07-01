@@ -1,4 +1,4 @@
-import { EventTool } from '@webav/internal-utils';
+import { EventTool } from '@webrock/internal-utils';
 import { IRectBaseProps, Rect } from './rect';
 
 // 缓动函数类型
@@ -132,8 +132,10 @@ export abstract class BaseSprite {
   opacity = 1;
   flip: 'horizontal' | 'vertical' | null = null;
 
-  #animatKeyFrame: TAnimationKeyFrame | null = null;
-  #animatOpts: Required<IAnimationOpts> | null = null;
+  // #animatKeyFrame: TAnimationKeyFrame | null = null;
+  // #animatOpts: Required<IAnimationOpts> | null = null;
+  public animatKeyFrame: TAnimationKeyFrame | null = null;
+  public animatOpts: Required<IAnimationOpts> | null = null;
 
   ready = Promise.resolve();
 
@@ -165,14 +167,14 @@ export abstract class BaseSprite {
    * 给素材添加动画，支持缓动
    */
   setAnimation(keyFrame: TKeyFrameOpts, opts: IAnimationOpts): void {
-    this.#animatKeyFrame = Object.entries(keyFrame).map(([k, val]) => {
+    this.animatKeyFrame = Object.entries(keyFrame).map(([k, val]) => {
       const numK = { from: 0, to: 100 }[k] ?? Number(k.slice(0, -1));
       if (isNaN(numK) || numK > 100 || numK < 0) {
         throw Error('keyFrame must between 0~100');
       }
       return [numK / 100, val];
     }) as TAnimationKeyFrame;
-    this.#animatOpts = Object.assign({}, this.#animatOpts, {
+    this.animatOpts = Object.assign({}, this.animatOpts, {
       duration: opts.duration,
       delay: opts.delay ?? 0,
       iterCount: opts.iterCount ?? Infinity,
@@ -182,15 +184,15 @@ export abstract class BaseSprite {
 
   animate(time: number): void {
     if (
-      this.#animatKeyFrame == null ||
-      this.#animatOpts == null ||
-      time < this.#animatOpts.delay
+      this.animatKeyFrame == null ||
+      this.animatOpts == null ||
+      time < this.animatOpts.delay
     )
       return;
     const updateProps = linearTimeFn(
       time,
-      this.#animatKeyFrame,
-      this.#animatOpts,
+      this.animatKeyFrame,
+      this.animatOpts,
     );
     for (const k in updateProps) {
       switch (k) {
@@ -208,23 +210,11 @@ export abstract class BaseSprite {
     }
   }
 
-  getAnimatKeyFrame(): TAnimationKeyFrame | null {
-    return this.#animatKeyFrame;
-  }
-  setAnimatKeyFrame(val: TAnimationKeyFrame | null) {
-    this.#animatKeyFrame = val;
-  }
-
-  getAnimatOpts(): Required<IAnimationOpts> | null {
-    return this.#animatOpts;
-  }
-  setAnimatOpts(val: Required<IAnimationOpts> | null) {
-    this.#animatOpts = val;
-  }
-
   copyStateTo<T extends BaseSprite>(target: T) {
-    target.setAnimatKeyFrame(this.getAnimatKeyFrame());
-    target.setAnimatOpts(this.getAnimatOpts());
+    target.animatKeyFrame = this.animatKeyFrame
+      ? JSON.parse(JSON.stringify(this.animatKeyFrame))
+      : null;
+    target.animatOpts = this.animatOpts ? { ...this.animatOpts } : null;
     target.zIndex = this.zIndex;
     target.opacity = this.opacity;
     target.flip = this.flip;

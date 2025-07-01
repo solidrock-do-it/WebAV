@@ -1,4 +1,4 @@
-import { VisibleSprite } from '@webav/av-cliper';
+import { VisibleSprite } from '@webrock/av-cliper';
 import { CTRL_KEYS, TCtrlKey } from '../types';
 import { createEl, getCvsRatio, getRectCtrls } from '../utils';
 import { ESpriteManagerEvt, SpriteManager } from './sprite-manager';

@@ -1,7 +1,7 @@
-import { BaseSprite } from './base-sprite';
-import { IClip } from '../clips';
-import { Log } from '@webav/internal-utils';
+import { Log } from '@webrock/internal-utils';
 import { changePCMPlaybackRate } from '../av-utils';
+import { IClip } from '../clips';
+import { BaseSprite } from './base-sprite';
 
 /**
  * 包装 {@link IClip} 给素材扩展坐标、层级、透明度等信息，用于 {@link [AVCanvas](../../av-canvas/classes/AVCanvas.html)} 响应用户交互

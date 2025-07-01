@@ -14,20 +14,20 @@ order: 2
 :::code-group
 
 ```bash [npm]
-npm install @webav/av-cliper
+npm install @webrock/av-cliper
 
-npm install @webav/av-canvas
+npm install @webrock/av-canvas
 ```
 
 ```bash [pnpm]
-pnpm add @webav/av-cliper
+pnpm add @webrock/av-cliper
 
-pnpm add @webav/av-canvas
+pnpm add @webrock/av-canvas
 ```
 
 :::
 
-如果你先项目依赖多个 `@webav/*` 下的包，务必让它们的版本号保持一致。
+如果你先项目依赖多个 `@webrock/*` 下的包，务必让它们的版本号保持一致。
 
 ## 项目目录
 

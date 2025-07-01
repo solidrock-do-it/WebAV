@@ -1,6 +1,6 @@
-import { Combinator, OffscreenSprite, IClip } from '@webav/av-cliper';
-import { CombinatorPlay } from './combinator-player';
+import { Combinator, IClip, OffscreenSprite } from '@webrock/av-cliper';
 import { useState } from 'react';
+import { CombinatorPlay } from './combinator-player';
 
 const WIDTH = 1280;
 const HEIGHT = 720;

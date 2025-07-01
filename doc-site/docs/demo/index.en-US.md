@@ -10,7 +10,7 @@ group:
 The left side contains several demos to experience, which are based on the [WebAV project][2] to implement various examples of processing audio and video data in a pure browser environment.
 
 ```tsx
-import { Combinator } from '@webav/av-cliper';
+import { Combinator } from '@webrock/av-cliper';
 import { useState, useEffect } from 'react';
 
 export default function UI() {
@@ -35,7 +35,6 @@ export default function UI() {
 
 1.  Make sure your browser supports the WebCodecs API (Chrome 102+), see details [1]
 2.  Audio and video resources are hosted on Github Pages, devices without a scientific connection may need to **wait patiently for resources to load**
-
     1. It is better to have scientific access to the Internet, otherwise the resources may fail to load
     2. Or try an example like **video recording** that doesn't require loading video assets
     3. You can also clone [WebAV project][2] and run it locally

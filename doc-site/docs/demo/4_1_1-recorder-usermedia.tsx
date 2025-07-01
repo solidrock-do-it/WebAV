@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { AVRecorder } from '@webrock/av-recorder';
 import { Button, Divider } from 'antd';
-import { AVRecorder } from '@webav/av-recorder';
+import { useEffect, useRef, useState } from 'react';
 import { createFileWriter } from './utils';
 
 let recorder: AVRecorder | null = null;

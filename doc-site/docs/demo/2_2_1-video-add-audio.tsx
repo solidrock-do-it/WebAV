@@ -3,7 +3,7 @@ import {
   Combinator,
   MP4Clip,
   OffscreenSprite,
-} from '@webav/av-cliper';
+} from '@webrock/av-cliper';
 import { useState } from 'react';
 import { CombinatorPlay } from './combinator-player';
 import { assetsPrefix } from './utils';

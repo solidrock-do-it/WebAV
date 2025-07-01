@@ -1,4 +1,4 @@
-import { ImgClip } from '@webav/av-cliper';
+import { ImgClip } from '@webrock/av-cliper';
 import { Button, Radio } from 'antd';
 import { useState } from 'react';
 import { assetsPrefix } from './utils';

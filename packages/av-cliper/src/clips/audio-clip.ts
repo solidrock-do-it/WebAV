@@ -1,9 +1,9 @@
+import { Log } from '@webrock/internal-utils';
 import {
   concatPCMFragments,
   extractPCM4AudioBuffer,
   ringSliceFloat32Array,
 } from '../av-utils';
-import { Log } from '@webav/internal-utils';
 import { DEFAULT_AUDIO_CONF, IClip } from './iclip';
 
 interface IAudioClipOpts {
@@ -44,8 +44,8 @@ export class AudioClip implements IClip {
     };
   }
 
-  #chan0Buf = new Float32Array();
-  #chan1Buf = new Float32Array();
+  #chan0Buf: Float32Array = new Float32Array();
+  #chan1Buf: Float32Array = new Float32Array();
   /**
    * 获取音频素材完整的 PCM 数据
    */

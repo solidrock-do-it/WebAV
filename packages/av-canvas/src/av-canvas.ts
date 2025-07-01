@@ -6,8 +6,8 @@ import {
   OffscreenSprite,
   Rect,
   VisibleSprite,
-} from '@webav/av-cliper';
-import { EventTool, workerTimer } from '@webav/internal-utils';
+} from '@webrock/av-cliper';
+import { EventTool, workerTimer } from '@webrock/internal-utils';
 import { renderCtrls } from './sprites/render-ctrl';
 import { ESpriteManagerEvt, SpriteManager } from './sprites/sprite-manager';
 import { activeSprite, draggabelSprite } from './sprites/sprite-op';

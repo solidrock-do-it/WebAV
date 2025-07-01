@@ -1,5 +1,5 @@
+import { createChromakey } from '@webrock/av-cliper';
 import { useEffect, useState } from 'react';
-import { createChromakey } from '@webav/av-cliper';
 import { assetsPrefix } from './utils';
 
 const imgSrc = assetsPrefix(['img/green-dog.jpeg']);

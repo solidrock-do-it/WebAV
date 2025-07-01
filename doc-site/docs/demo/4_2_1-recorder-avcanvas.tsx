@@ -1,11 +1,11 @@
-import { AVCanvas } from '@webav/av-canvas';
+import { AVCanvas } from '@webrock/av-canvas';
 import {
   ImgClip,
   MediaStreamClip,
   VisibleSprite,
   renderTxt2ImgBitmap,
-} from '@webav/av-cliper';
-import { AVRecorder } from '@webav/av-recorder';
+} from '@webrock/av-cliper';
+import { AVRecorder } from '@webrock/av-recorder';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 

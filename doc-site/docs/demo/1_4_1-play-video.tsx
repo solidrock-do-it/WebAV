@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Slider, Button } from 'antd';
-import { MP4Clip } from '@webav/av-cliper';
+import { MP4Clip } from '@webrock/av-cliper';
+import { Button, Slider } from 'antd';
+import { useEffect, useState } from 'react';
 import { assetsPrefix } from './utils';
 
 const videoSrc = assetsPrefix(['video/bunny_0.mp4']);

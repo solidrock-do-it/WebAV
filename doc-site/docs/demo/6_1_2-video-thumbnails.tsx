@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { MP4Clip } from '@webav/av-cliper';
+import { MP4Clip } from '@webrock/av-cliper';
+import { useEffect, useState } from 'react';
 import { assetsPrefix } from './utils';
 
 const resList = assetsPrefix(['video/bunny.mp4']);

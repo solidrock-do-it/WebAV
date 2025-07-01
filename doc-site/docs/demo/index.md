@@ -10,7 +10,7 @@ group:
 左侧包含多个可体验的 DEMO，是基于 [WebAV 项目][2]实现在纯浏览器环境中处理音视频数据的各种示例。
 
 ```tsx
-import { Combinator } from '@webav/av-cliper';
+import { Combinator } from '@webrock/av-cliper';
 import { useState, useEffect } from 'react';
 
 export default function UI() {

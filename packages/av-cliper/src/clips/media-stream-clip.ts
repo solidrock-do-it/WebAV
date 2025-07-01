@@ -1,4 +1,4 @@
-import { autoReadStream } from '@webav/internal-utils';
+import { autoReadStream } from '@webrock/internal-utils';
 import { IClip } from './iclip';
 
 /**

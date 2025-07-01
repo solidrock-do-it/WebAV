@@ -9,7 +9,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/lerna",
-      "runtimeArgs": ["exec", "--scope", "@webav/av-canvas", "--", "node"],
+      "runtimeArgs": ["exec", "--scope", "@webrock/av-canvas", "--", "node"],
       "args": [
         "${workspaceRoot}/node_modules/.bin/vitest",
         "packages/av-canvas"
@@ -22,7 +22,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/lerna",
-      "runtimeArgs": ["exec", "--scope", "@webav/av-cliper", "--", "node"],
+      "runtimeArgs": ["exec", "--scope", "@webrock/av-cliper", "--", "node"],
       "args": [
         "${workspaceRoot}/node_modules/.bin/vitest",
         "packages/av-cliper"

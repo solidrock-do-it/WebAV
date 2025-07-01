@@ -1,7 +1,7 @@
-import { BaseSprite } from './base-sprite';
-import { IClip } from '../clips';
-import { Log } from '@webav/internal-utils';
+import { Log } from '@webrock/internal-utils';
 import { changePCMPlaybackRate } from '../av-utils';
+import { IClip } from '../clips';
+import { BaseSprite } from './base-sprite';
 
 /**
  * 包装 {@link IClip} 给素材扩展坐标、层级、透明度等信息，用于 {@link Combinator} 在后台合成视频
@@ -50,6 +50,13 @@ export class OffscreenSprite extends BaseSprite {
   }> {
     const ts = time * this.time.playbackRate;
     this.animate(ts);
+    console.log('动画属性：', {
+      ts,
+      animatKeyFrame: this.animatKeyFrame,
+      animatOpts: this.animatOpts,
+      opacity: this.opacity,
+      rect: { ...this.rect },
+    });
     super._render(ctx);
     const { w, h } = this.rect;
     const { video, audio, state } = await this.#clip.tick(ts);

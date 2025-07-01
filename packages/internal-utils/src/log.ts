@@ -111,7 +111,7 @@ interface PressureRecord {
   await Promise.resolve();
   if (globalThis.navigator == null || globalThis.document == null) return;
   Log.info(
-    `@webav version: ${PKG_VERSION}, date: ${new Date().toLocaleDateString()}`,
+    `@webrock version: ${PKG_VERSION}, date: ${new Date().toLocaleDateString()}`,
   );
   Log.info(globalThis.navigator.userAgent);
   document.addEventListener('visibilitychange', () => {
