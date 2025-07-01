@@ -34,6 +34,10 @@
     "ci:test": "pnpm -F @webrock/* run ci:test",
     "publish:all": "pnpm publish -r",
     "publish:all:next": "pnpm publish -r --tag next",
+    "publish:av-canvas": "pnpm --filter ./packages/av-canvas publish --access public",
+    "publish:av-cliper": "pnpm --filter ./packages/av-cliper publish --access public",
+    "publish:av-recorder": "pnpm --filter ./packages/av-recorder publish --access public",
+    "publish:core": "pnpm run publish:av-canvas && pnpm run publish:av-cliper && pnpm run publish:av-recorder",
     "build:api": "pnpm -F @webrock/* run build:api",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "upver": "pnpm changeset version",
@@ -50,5 +54,11 @@
     "*.{json,ts,tsx,js,md}": [
       "npx prettier --write"
     ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@webav/mp4box.js": "0.5.6"
   }
 }
