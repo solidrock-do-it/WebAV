@@ -208,9 +208,23 @@ export abstract class BaseSprite {
     }
   }
 
+  getAnimatKeyFrame(): TAnimationKeyFrame | null {
+    return this.#animatKeyFrame;
+  }
+  setAnimatKeyFrame(val: TAnimationKeyFrame | null) {
+    this.#animatKeyFrame = val;
+  }
+
+  getAnimatOpts(): Required<IAnimationOpts> | null {
+    return this.#animatOpts;
+  }
+  setAnimatOpts(val: Required<IAnimationOpts> | null) {
+    this.#animatOpts = val;
+  }
+
   copyStateTo<T extends BaseSprite>(target: T) {
-    target.#animatKeyFrame = this.#animatKeyFrame;
-    target.#animatOpts = this.#animatOpts;
+    target.setAnimatKeyFrame(this.getAnimatKeyFrame());
+    target.setAnimatOpts(this.getAnimatOpts());
     target.zIndex = this.zIndex;
     target.opacity = this.opacity;
     target.flip = this.flip;

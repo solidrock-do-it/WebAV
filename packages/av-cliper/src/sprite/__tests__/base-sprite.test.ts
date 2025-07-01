@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { TAnimationKeyFrame, linearTimeFn } from '../base-sprite';
+import { EasingType, TAnimationKeyFrame, linearTimeFn } from '../base-sprite';
 
 describe('Animation', () => {
   const keyFrames: TAnimationKeyFrame = [
@@ -11,6 +11,7 @@ describe('Animation', () => {
     duration: 10,
     delay: 0,
     iterCount: Infinity,
+    easing: EasingType.Linear,
   };
 
   test('linearTimeFn 10%', () => {
