@@ -50,13 +50,6 @@ export class OffscreenSprite extends BaseSprite {
   }> {
     const ts = time * this.time.playbackRate;
     this.animate(ts);
-    console.log('动画属性：', {
-      ts,
-      animatKeyFrame: this.animatKeyFrame,
-      animatOpts: this.animatOpts,
-      opacity: this.opacity,
-      rect: { ...this.rect },
-    });
     super._render(ctx);
     const { w, h } = this.rect;
     const { video, audio, state } = await this.#clip.tick(ts);
